@@ -2,8 +2,9 @@ from flask import jsonify, request, current_app as app
 from datetime import datetime
 from flask_restful import Api, Resource, fields, marshal_with
 from flask_security import auth_required, current_user
-from backend.models import Campaign, db
+from backend.models import Campaign, Role, User, db
 
+cache = app.cache
 api = Api(prefix = '/api')
 
 campaign_fields = {
@@ -21,7 +22,9 @@ campaign_fields = {
 class CampaignAPI(Resource):
     
     @marshal_with(campaign_fields)
+
     @auth_required('token')
+    @cache.memoize(timeout = 5)
     def get(self, campaign_id):
         campaign = Campaign.query.get(campaign_id)
         if not campaign:
@@ -43,6 +46,7 @@ class CampaignListAPI(Resource):
     
     @marshal_with(campaign_fields)
     @auth_required('token')
+    @cache.cached(timeout = 5, key_prefix = "campaign_list")
     def get(self):
         campaigns = Campaign.query.all()
         return campaigns

@@ -10,4 +10,9 @@ class LocalDevelopmentConfig(Config):
     SECRET_KEY = 'SHOULDBEKEPTVERYHIDDEN'
     SECURITY_TOKEN_AUTHENTICATION_HEADER = 'Authentication-Token'
     
+    CACHE_TYPE = "RedisCache"
+    CACHE_DEFAULT_TIMEOUT = 30
+    CACHE_REDIS_PORT = 6379 
+
+
     WTF_CSRF_ENABLED = False

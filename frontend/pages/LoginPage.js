@@ -24,6 +24,11 @@ export default {
                 console.log('we are logged in')
                 const data = await res.json()
                 console.log(data)
+
+                localStorage.setItem('user', JSON.stringify(data))
+                
+                this.$store.commit('setUser')
+                this.$router.push('/campaigns')
             }
         }
     }
